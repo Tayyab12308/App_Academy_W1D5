@@ -1,4 +1,12 @@
 require "byebug"
+# MAX_STACK_SIZE = 20
+# tracer = proc do |event|
+#   if event == 'call' && caller_locations.length > MAX_STACK_SIZE
+#     fail "Probable Stack Overflow"
+#   end
+# end
+# set_trace_func(tracer)
+
 
 class PolyTreeNode
   attr_reader :value, :children, :parent
@@ -30,6 +38,26 @@ class PolyTreeNode
     else
       raise "#{child.value} is not a child of #{self.value}}"
     end
+  end
+
+  def dfs(target)
+    return self if self.value == target
+    # debugger
+    if !self.children.empty?
+      # debugger
+      self.children.each do |child|
+        # debugger
+        return_val = child.dfs(target)
+        return return_val unless return_val.nil?
+        # debugger
+      end
+      # debugger
+    end
+    nil
+  end
+
+  def inspect
+    { 'value' => @value, 'parent_node' => @parent.nil? ? nil : @parent.value, 'children_nodes' => @children.map { |child| child.value } }.inspect
   end
 
 end
