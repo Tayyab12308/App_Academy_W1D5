@@ -11,7 +11,7 @@ class KnightPathFinder
 
   def initialize(start_pos)
     # assumes start_pos is input as an array i.e. '[0, 1]'
-    @start_pos = KnightPathFinder.root_node(start_pos)
+    @start_node = KnightPathFinder.root_node(start_pos)
     @pos_considered = [ start_pos ]
   end
 
@@ -27,7 +27,7 @@ class KnightPathFinder
   end
 
   def self.all_moves(pos)
-    movements = [[2, 1], [1, 2], [2, -1], [1, -2,], [-2, 1], [-1, 2], [-2, -1], [-1, -2]]
+    movements = [[2, 1], [1, 2], [2, -1], [1, -2], [-2, 1], [-1, 2], [-2, -1], [-1, -2]]
     movements.map { |move| [ move[0] + pos[0], move[1] + pos[1] ] }
   end
 
@@ -43,10 +43,25 @@ class KnightPathFinder
     false
   end
 
+  def build_move_tree
+    tree = []
+    queue = [ @start_node ]
+    until queue.empty?
+      current_node = queue.pop
+      branches = new_move_positions(current_node.value)
+      branches.each do |pos|
+        new_node = PolyTreeNode.new(pos)
+        new_node.parent = current_node
+        queue.unshift(new_node)
+      end
+      tree << current_node
+    end
+    tree
+  end
 end
 
- kpf = KnightPathFinder.new([0, 1])
+ kpf = KnightPathFinder.new([0, 0])
 #  p kpf.all_moves([2, 3])
-
-p kpf.new_move_positions([0, 2])
-p kpf.pos_considered
+var = kpf.build_move_tree
+all = var.each { |val| p val }
+p all.count
