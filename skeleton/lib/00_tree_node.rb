@@ -56,6 +56,22 @@ class PolyTreeNode
     nil
   end
 
+  def bfs(target)
+    queue = [ self ]
+    until queue.empty?
+      current_node = queue.pop
+      return current_node if current_node.value == target
+      current_node.children.each do |child|
+        queue.unshift(child)
+      end
+    end
+    nil
+
+    # as we iterate over a node we want to add its children to the queue
+    
+
+  end
+
   def inspect
     { 'value' => @value, 'parent_node' => @parent.nil? ? nil : @parent.value, 'children_nodes' => @children.map { |child| child.value } }.inspect
   end
